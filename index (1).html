@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fatima Hisham — Game Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #7c6aff;
+    --accent2: #ff6a9e;
+    --accent3: #6affda;
+    --text: #e8e8f0;
+    --muted: #7878a0;
+    --tag-bg: #1e1e2e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 12s ease-in-out infinite alternate;
+  }
+  .blob1 { width: 500px; height: 500px; background: rgba(124,106,255,0.12); top: -100px; left: -100px; }
+  .blob2 { width: 400px; height: 400px; background: rgba(255,106,158,0.08); bottom: 100px; right: -50px; animation-delay: -6s; }
+  .blob3 { width: 300px; height: 300px; background: rgba(106,255,218,0.06); top: 50%; left: 40%; animation-delay: -3s; }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(30px, 20px) scale(1.05); }
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 0 32px; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 0;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    background: rgba(10,10,15,0.7);
+  }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+  }
+  .hero-inner { display: grid; grid-template-columns: 1fr auto; gap: 60px; align-items: center; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 24px; height: 1px; background: var(--accent);
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  h1 .line2 { color: var(--accent); }
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin: 24px 0 40px;
+    max-width: 480px;
+    line-height: 1.7;
+  }
+  .hero-sub strong { color: var(--text); font-weight: 500; }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: 6px;
+    font-size: 0.875rem; font-weight: 500;
+    text-decoration: none; transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    box-shadow: 0 0 30px rgba(124,106,255,0.3);
+  }
+  .btn-primary:hover {
+    background: #9080ff;
+    box-shadow: 0 0 40px rgba(124,106,255,0.5);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    border: 1px solid var(--border); color: var(--text);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+  .hero-visual {
+    width: 200px; height: 200px; flex-shrink: 0;
+    position: relative;
+  }
+  .hero-visual svg { width: 100%; height: 100%; }
+  .orbit-ring {
+    position: absolute; inset: -20px;
+    border: 1px dashed rgba(124,106,255,0.2);
+    border-radius: 50%;
+    animation: spin 20s linear infinite;
+  }
+  .orbit-dot {
+    position: absolute; top: -5px; left: 50%;
+    width: 8px; height: 8px; margin-left: -4px;
+    background: var(--accent); border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  section { padding: 100px 0; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+  }
+  .section-label::after { content: ''; display: block; width: 40px; height: 1px; background: var(--accent); }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    letter-spacing: -0.02em; margin-bottom: 56px; line-height: 1.1;
+  }
+
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
+  }
+  .skill-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .skill-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .skill-icon { font-size: 1.6rem; margin-bottom: 12px; }
+  .skill-name {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 0.9rem; color: var(--text); margin-bottom: 8px;
+  }
+  .skill-items { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+  .projects-list { display: flex; flex-direction: column; gap: 32px; }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .project-card:hover { border-color: rgba(124,106,255,0.4); transform: translateY(-4px); }
+  .project-card:hover::before { opacity: 1; }
+
+  .project-body { padding: 36px; }
+  .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 16px; }
+  .project-number {
+    font-family: 'Syne', sans-serif; font-size: 0.7rem;
+    font-weight: 700; color: var(--accent); letter-spacing: 0.1em;
+    opacity: 0.6;
+  }
+  .project-links { display: flex; gap: 10px; flex-shrink: 0; }
+  .project-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 500;
+    text-decoration: none; border: 1px solid var(--border);
+    color: var(--muted); transition: all 0.2s;
+  }
+  .project-link:hover { border-color: var(--accent); color: var(--accent); }
+  .project-link.featured { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .project-link.featured:hover { background: #9080ff; }
+
+  h3 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1.35rem; letter-spacing: -0.01em;
+    margin-bottom: 12px; color: var(--text);
+  }
+  .project-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    background: var(--tag-bg); border: 1px solid var(--border);
+    color: var(--muted); font-size: 0.72rem; font-weight: 500;
+    padding: 4px 12px; border-radius: 20px; letter-spacing: 0.03em;
+  }
+  .tag.highlight { border-color: rgba(124,106,255,0.4); color: var(--accent); background: rgba(124,106,255,0.08); }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .about-text p { color: var(--muted); font-size: 0.95rem; line-height: 1.8; margin-bottom: 16px; }
+  .about-text p strong { color: var(--text); font-weight: 500; }
+  .certs { display: flex; flex-direction: column; gap: 12px; }
+  .cert {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .cert-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .cert-name { font-size: 0.85rem; font-weight: 500; color: var(--text); }
+  .cert-org { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+  .contact-section { text-align: center; padding: 80px 0 120px; }
+  .contact-section h2 { margin-bottom: 16px; }
+  .contact-sub { color: var(--muted); margin-bottom: 40px; font-size: 0.95rem; }
+  .contact-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 700px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<nav>
+  <div class="wrap">
+    <a href="#" class="nav-logo">fh<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">CS Student & Game Developer</div>
+        <h1>
+          Fatima<br>
+          <span class="line2">Hisham</span>
+        </h1>
+        <p class="hero-sub">
+          Building games, solving problems, learning fast.<br>
+          <strong>Published game dev</strong> with a passion for interactive systems
+          and a curiosity that refuses to stay in the curriculum.
+        </p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn btn-primary">View Projects</a>
+          <a href="https://github.com/fhisham0" target="_blank" class="btn btn-ghost">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="orbit-ring"><div class="orbit-dot"></div></div>
+        <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="80" cy="80" r="70" stroke="#2a2a3a" stroke-width="1"/>
+          <circle cx="80" cy="80" r="50" fill="#16161f" stroke="#7c6aff" stroke-width="1" stroke-dasharray="4 4"/>
+          <ellipse cx="80" cy="88" rx="26" ry="22" fill="#7c6aff" opacity="0.9"/>
+          <ellipse cx="80" cy="68" rx="18" ry="16" fill="#7c6aff" opacity="0.9"/>
+          <polygon points="65,58 60,44 73,54" fill="#9080ff"/>
+          <polygon points="95,58 100,44 87,54" fill="#9080ff"/>
+          <ellipse cx="73" cy="67" rx="4" ry="5" fill="#0a0a0f"/>
+          <ellipse cx="87" cy="67" rx="4" ry="5" fill="#0a0a0f"/>
+          <circle cx="74" cy="66" r="1.5" fill="#6affda"/>
+          <circle cx="88" cy="66" r="1.5" fill="#6affda"/>
+          <polygon points="80,73 77,76 83,76" fill="#ff6a9e"/>
+          <line x1="56" y1="74" x2="70" y2="75" stroke="#e8e8f0" stroke-width="0.8" opacity="0.6"/>
+          <line x1="56" y1="77" x2="70" y2="77" stroke="#e8e8f0" stroke-width="0.8" opacity="0.6"/>
+          <line x1="90" y1="75" x2="104" y2="74" stroke="#e8e8f0" stroke-width="0.8" opacity="0.6"/>
+          <line x1="90" y1="77" x2="104" y2="77" stroke="#e8e8f0" stroke-width="0.8" opacity="0.6"/>
+          <path d="M100 100 Q120 90 116 110 Q112 120 104 108" stroke="#7c6aff" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <ellipse cx="68" cy="108" rx="7" ry="5" fill="#9080ff"/>
+          <ellipse cx="92" cy="108" rx="7" ry="5" fill="#9080ff"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-label">Work</div>
+    <h2>Featured Projects</h2>
+
+    <div class="projects-list">
+
+      <div class="project-card fade-up">
+        <div class="project-body">
+          <div class="project-header">
+            <div class="project-number">01 — Game Development</div>
+            <div class="project-links">
+              <a href="https://youtu.be/1gaIVDCumik?si=m-GpGrj4_P1oTQMk" target="_blank" class="project-link">▶ Trailer</a>
+              <a href="https://fhisham0.itch.io/stray-cat" target="_blank" class="project-link featured">Play on itch.io →</a>
+            </div>
+          </div>
+          <h3>Stray Cat 🐱</h3>
+          <p class="project-desc">
+            A 2D cave exploration game where a lost cat finds its way home. Designed, built, and published solo
+            as part of Baghdad Game Lab's online Game Jam — from concept to public release in a single sprint.
+            Self-taught Godot Engine and GDScript during development, then shipped the final build on itch.io as
+            a free Windows download.
+          </p>
+          <div class="project-tags">
+            <span class="tag highlight">Godot Engine</span>
+            <span class="tag highlight">GDScript</span>
+            <span class="tag">Baghdad Game Lab</span>
+            <span class="tag">Game Jam</span>
+            <span class="tag">Published</span>
+            <span class="tag">Solo Dev</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card fade-up">
+        <div class="project-body">
+          <div class="project-header">
+            <div class="project-number">02 — Software Development</div>
+            <div class="project-links">
+              <a href="https://github.com/fhisham0/StudentProductivityApp" target="_blank" class="project-link featured">View on GitHub →</a>
+            </div>
+          </div>
+          <h3>Student Productivity App</h3>
+          <p class="project-desc">
+            A task management desktop application built in C# with Windows Forms, applying core OOP principles
+            including encapsulation, class hierarchies, and event-driven architecture. Independently designed
+            and developed from concept to working application — focused on clean, readable code and practical
+            UI design fundamentals.
+          </p>
+          <div class="project-tags">
+            <span class="tag highlight">C#</span>
+            <span class="tag highlight">Windows Forms</span>
+            <span class="tag">OOP</span>
+            <span class="tag">Event-Driven</span>
+            <span class="tag">Solo Dev</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card fade-up">
+        <div class="project-body">
+          <div class="project-header">
+            <div class="project-number">03 — Database Systems</div>
+            <div class="project-links">
+              <a href="https://github.com/fhisham0/DB-project" target="_blank" class="project-link featured">View on GitHub →</a>
+            </div>
+          </div>
+          <h3>Al-Noor Company — Distributed DB Design</h3>
+          <p class="project-desc">
+            A complete distributed database system design for a food import company in Mosul.
+            Covered entity modeling, schema design, horizontal/vertical/derived fragmentation strategies,
+            replication policies, and multi-site network topology — translating academic database theory
+            into a structured, real-world system design.
+          </p>
+          <div class="project-tags">
+            <span class="tag highlight">SQL</span>
+            <span class="tag highlight">Distributed Systems</span>
+            <span class="tag">Fragmentation</span>
+            <span class="tag">Replication</span>
+            <span class="tag">Network Topology</span>
+            <span class="tag">Solo</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-label">Toolkit</div>
+    <h2>Skills & Technologies</h2>
+    <div class="skills-grid">
+      <div class="skill-card fade-up">
+        <div class="skill-icon">🎮</div>
+        <div class="skill-name">Game Dev</div>
+        <div class="skill-items">Godot Engine · GDScript · Unity (in progress) · Game Architecture · Scene Management</div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon">💻</div>
+        <div class="skill-name">Languages</div>
+        <div class="skill-items">C# · Python · HTML · GDScript</div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon">🧱</div>
+        <div class="skill-name">CS Fundamentals</div>
+        <div class="skill-items">OOP · Algorithms & Data Structures · Distributed DB Systems · Computer Architecture</div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon">🛠️</div>
+        <div class="skill-name">Tools</div>
+        <div class="skill-items">Git · GitHub · Visual Studio · Windows Forms</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-label">About</div>
+    <h2>A Bit About Me</h2>
+    <div class="about-grid">
+      <div class="about-text fade-up">
+        <p>
+          I'm <strong>Fatima Alsaydiya</strong>, a second-year Computer Science student at the University of Mosul
+          with a genuine obsession for building things that are interactive, creative, and fun.
+        </p>
+        <p>
+          I built and published my first game — <strong>Stray Cat</strong> — solo during
+          Baghdad Game Lab's Game Jam, teaching myself Godot Engine from scratch under
+          competitive time pressure. That experience taught me more than any lecture could.
+        </p>
+        <p>
+          I'm currently expanding into <strong>Unity</strong>, actively learning game mechanics
+          and interactive systems, and looking for opportunities to grow inside a real
+          development team.
+        </p>
+      </div>
+      <div class="certs fade-up">
+        <div class="cert">
+          <div class="cert-icon">🏅</div>
+          <div>
+            <div class="cert-name">Python Course For Beginners</div>
+            <div class="cert-org">GDG Aliraqia · Aug 2025</div>
+          </div>
+        </div>
+        <div class="cert">
+          <div class="cert-icon">🎓</div>
+          <div>
+            <div class="cert-name">Code in Place — Python</div>
+            <div class="cert-org">Stanford University · 2026 (In Progress)</div>
+          </div>
+        </div>
+        <div class="cert">
+          <div class="cert-icon">🎮</div>
+          <div>
+            <div class="cert-name">Game Jam Participant</div>
+            <div class="cert-org">Baghdad Game Lab · Dec 2025</div>
+          </div>
+        </div>
+        <div class="cert">
+          <div class="cert-icon">🤖</div>
+          <div>
+            <div class="cert-name">AI Hackathon Participant</div>
+            <div class="cert-org">University of Mosul · Feb 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact-section">
+  <div class="wrap">
+    <div class="section-label" style="justify-content:center;">Let's Connect</div>
+    <h2>Get In Touch</h2>
+    <p class="contact-sub">Open to internship opportunities, collaborations, and game jams.</p>
+    <div class="contact-links">
+      <a href="https://github.com/fhisham0" target="_blank" class="btn btn-ghost">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        GitHub
+      </a>
+      
+      <a href="https://www.linkedin.com/in/fatima-alsaydiya" target="_blank" class="btn btn-primary">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        LinkedIn
+      </a>
+
+      <a href="https://fhisham0.itch.io/stray-cat" target="_blank" class="btn btn-ghost">🎮 itch.io</a>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="wrap">
+    Built with care · Fatima Alsaydiya · 2026
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
